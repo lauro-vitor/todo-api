@@ -78,9 +78,9 @@ namespace TodoApp.DAL
                 {
                     return _context.Todo
                          .Where(filterTodo)
+                         .OrderBy(sortTodo)
                          .Skip(paging.Limit * (paging.Page - 1))
                          .Take(paging.Limit)
-                         .OrderBy(sortTodo)
                          .ToAsyncEnumerable()
                          .ToList();
                 }
@@ -88,9 +88,9 @@ namespace TodoApp.DAL
                 {
                     return _context.Todo
                          .Where(filterTodo)
+                         .OrderByDescending(sortTodo)
                          .Skip(paging.Limit * (paging.Page - 1))
                          .Take(paging.Limit)
-                         .OrderByDescending(sortTodo)
                          .ToAsyncEnumerable()
                          .ToList();
                 }
