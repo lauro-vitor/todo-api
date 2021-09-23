@@ -34,7 +34,7 @@ namespace TodoApp.DAL
             _context.Remove(todo);
         }
 
-        public Task<List<Todo>> GetAll(Todo filterEntity, PagingModel paging, SortingModel sorting)
+        public IEnumerable<Todo> GetAll(Todo filterEntity, SortingModel sorting)
         {
 
             Func<Todo, bool> filterTodo = null;
@@ -75,35 +75,19 @@ namespace TodoApp.DAL
                 }
 
                 if (sorting.SortDirection == "asc")
-                {
                     return _context.Todo
-                         .Where(filterTodo)
-                         .OrderBy(sortTodo)
-                         .Skip(paging.Limit * (paging.Page - 1))
-                         .Take(paging.Limit)
-                         .ToAsyncEnumerable()
-                         .ToList();
-                }
+                           .Where(filterTodo)
+                           .OrderBy(sortTodo)
+                           .ToList();
                 else
-                {
                     return _context.Todo
                          .Where(filterTodo)
                          .OrderByDescending(sortTodo)
-                         .Skip(paging.Limit * (paging.Page - 1))
-                         .Take(paging.Limit)
-                         .ToAsyncEnumerable()
                          .ToList();
-                }
             }
             else
-            {
-                return _context.Todo
-                    .Where(filterTodo)
-                    .Skip(paging.Limit * (paging.Page - 1))
-                    .Take(paging.Limit)
-                    .ToAsyncEnumerable()
+                return _context.Todo.Where(filterTodo)
                     .ToList();
-            }
         }
 
         public Task<Todo> GetById(int Id)

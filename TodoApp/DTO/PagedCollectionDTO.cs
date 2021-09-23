@@ -10,8 +10,9 @@ namespace TodoApp.Models
         public List<T> Items { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public int PageQuantity { get; set; }
         public int TotalItems { get; set; }
-        public Uri NextPage { get; set; }
-        public Uri PreviousPage { get; set; }
+        public string NextPage { get; set; }
+        public string PreviousPage { get; set; }  
     }
 }

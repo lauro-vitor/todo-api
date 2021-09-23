@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using TodoApp.DTO;
 using TodoApp.DAL;
+using TodoApp.Service;
 
 namespace TodoApp.Controller
 {
@@ -25,25 +26,16 @@ namespace TodoApp.Controller
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedCollectionDTO<TodoDTO>>> GetAll([FromQuery] Todo todoFilter,
-            [FromQuery] PagingModel paging,
-            [FromQuery] SortingModel sorting)
+        public ActionResult<PagedCollectionDTO<TodoDTO>> GetAll([FromQuery] Todo todoFilter,
+             [FromQuery] SortingModel sorting,
+            [FromQuery] PagingModel paging)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    TodoDAL todoDAL = new TodoDAL(_context);
-                    List<Todo> todoList = await todoDAL.GetAll(todoFilter, paging, sorting);
-                    List<TodoDTO> todoListDTO = todoList.Select(t => new TodoDTO(t)).ToList();
-                    PagedCollectionDTO<TodoDTO> result = new PagedCollectionDTO<TodoDTO>()
-                    {
-                        Items = todoListDTO,
-                        TotalItems = todoListDTO.Count(),
-                        PageNumber = paging.Page,
-                        PageSize = paging.Limit,
-                    };
-
+                    TodoService todoService = new TodoService(_context, HttpContext);
+                    PagedCollectionDTO<TodoDTO> result = todoService.GetAll(todoFilter, sorting, paging);
                     return Ok(result);
                 }
                 else
@@ -51,6 +43,9 @@ namespace TodoApp.Controller
             }
             catch (Exception ex)
             {
+                //HttpResponseException httpResponseException = new HttpResponseException();
+                
+                //httpResponseException.Message = ex.Message;
                 return BadRequest(ex);
             }
 

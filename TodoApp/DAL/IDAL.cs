@@ -8,7 +8,7 @@ namespace TodoApp.DAL
 {
     interface IDAL<T> where T : class
     {
-        Task<List<T>> GetAll(T filterEntity, PagingModel paging, SortingModel sorting);
+        IEnumerable<T> GetAll(T filterEntity, SortingModel sorting);
         Task<T> GetById(int Id);
         Task<T> Create(T entity);
         Task Update(T entity);
